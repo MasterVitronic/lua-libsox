@@ -4,6 +4,8 @@ pages:
   script:
   - apk update && apk add ldoc
   - ldoc -v -c docs/config.ld -d ../public -a .
+  - mkdir -p public/manual/docs
+  - cp docs/powered-by-lua.gif public/manual/docs
   artifacts:
     paths:
     - public
