@@ -10,8 +10,8 @@ libsox.so: lua-libsox.o
 	$(CC) -shared $(CFLAGS) -o $@ lua-libsox.o $(LIBS)
 
 install:
-	mkdir -p $(DESTDIR)$(LIBDIR)/lua/$(LUA)
-	cp libsox.so $(DESTDIR)$(LIBDIR)/lua/$(LUA)
+	mkdir -p $(DESTDIR)$(LIBDIR)
+	cp libsox.so $(DESTDIR)$(LIBDIR)
 
 docs: libsox.so docs/config.ld
 	ldoc -c docs/config.ld -d html -a .
