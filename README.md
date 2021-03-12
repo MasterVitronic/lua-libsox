@@ -7,7 +7,7 @@ and [SoX](http://sox.sourceforge.net/) (>=14.4.2).
 
 _Authored by:_ _[Díaz Devera Víctor Diex Gamar (Máster Vitronic)](https://www.linkedin.com/in/Master-Vitronic)_
 
-[![Lua logo](./docs/powered-by-lua.gif)](http://www.lua.org/)
+[![Lua logo](https://gitlab.com/vitronic/lua-libsox/-/raw/3a2ad8f5c78b54f1de6dec8019f2c743901e621f/docs/powered-by-lua.gif)](http://www.lua.org/)
 
 #### License
 
@@ -15,7 +15,7 @@ MIT license . See [LICENSE](./LICENSE).
 
 #### Documentation
 
-See the [Reference Manual](https://vitronic.gitlab.io/lua-libxox/).
+See the [Reference Manual](https://vitronic.gitlab.io/lua-libsox/).
 
 #### Motivation:
 
