@@ -1,0 +1,11 @@
+image: alpine:latest
+pages:
+  stage: deploy
+  script:
+  - apk update && apk add ldoc
+  - ldoc -v -c docs/config.ld -d ../public -a .
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
