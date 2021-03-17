@@ -118,8 +118,9 @@ static int l_sox_quit( lua_State * L ) {
 	return 1;
 }
 
+
 /***
- * Set the buffer size
+ * Allocates size bytes in storage buffer, default is (32768).
  * @function buffer
  * @tparam integer size  size of buffer
  * @treturn userdata Returned buffer handle .
@@ -129,13 +130,27 @@ static int l_buffer(lua_State *L) {
 	if ( lua_isnumber(L, 2) ){
 		buf_sz = luaL_checknumber(L, 2);
 	} else {
-		buf_sz = 8192;
+		buf_sz = 32768;
 	}
-	sox_sample_t* buffer[buf_sz+sizeof(buf_sz)];
+	sox_sample_t* buffer = malloc(sizeof(sox_sample_t)*buf_sz);
 	lua_pushlightuserdata(L, buffer);
 
 	return 1;
 }
+
+
+/***
+ * Deallocates the space previously allocated to buffer.
+ * @function free_buffer
+ * @tparam userdata buf the buffer handle
+ */
+static int l_free_buffer(lua_State *L) {
+	sox_sample_t* buf = lua_touserdata(L, 2);
+	lua_pushnil(L);
+	free(buf);
+	return 0;
+}
+
 
 /***
  * Converts SoX native sample to a 32-bit float.
@@ -654,13 +669,40 @@ static int l_sox_close( lua_State * L ) {
 		lua_pushboolean(L, 0);
 	} else {
 		lua_pushboolean(L, 1);
-	}	
+	}
 	return 1;
+}
+
+
+/***
+ * Blocks the execution of the current thread for at least until the msecs
+ * @function msecs
+ * @tparam integer msecs the number millisecons.
+ */
+static int l_msleep(lua_State *L){
+    long msecs = lua_tointeger(L, -1);
+    usleep(1000*msecs);
+    return 0;
+}
+
+
+/***
+ * Blocks the execution of the current thread for at least until the secs
+ * @function sleep
+ * @tparam integer secs the number secons.
+ */
+static int l_sleep(lua_State *L){
+    long secs = lua_tointeger(L, -1);
+    sleep(secs);
+    return 0;
 }
 
 
 static const struct luaL_Reg funcs [] = {
     {"new", l_new},
+    {"msleep", l_msleep},
+    {"sleep", l_sleep},
+    {"__gc", l_sox_quit},
     {NULL, NULL}
 };
 
@@ -669,6 +711,7 @@ static const struct luaL_Reg meths [] = {
     {"init", l_sox_init},
     {"quit", l_sox_quit},
     {"buffer", l_buffer},
+    {"free_buffer", l_free_buffer},
     {"sample_to_float32", l_sample_to_float32},
     {"sample_to_float64", l_sample_to_float64},
     {"get_levels", l_get_levels},
@@ -700,11 +743,8 @@ int luaopen_libsox (lua_State *L) {
 	lua_setfield(L, -2, "__index");
 	luaL_setfuncs(L, meths, 0);
 
-#if LUA_VERSION_NUM >= 502
 	luaL_newlib(L, funcs);
-#else
-	luaL_register(L, "sox", funcs);
-#endif
+
 	return 1;
 }
 
