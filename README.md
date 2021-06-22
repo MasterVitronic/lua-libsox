@@ -35,6 +35,18 @@ lua-libsox$ make
 lua-libsox$ make install # or 'sudo make install' (Ubuntu)
 ```
 
+#### installing with luarocks
+
+```sh
+
+(local) build and install packages from a local rockspec
+lua-libsox$ luarocks build lua-libsox-scm-0.rockspec
+
+(online) install from the site directly
+lua-libsox$ luarocks install lua-libsox
+
+```
+
 #### Example
 
 ```lua
